@@ -9,14 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UsernameTest {
-    @Test
-    void correctUsername() {
-        assertTrue(Username.validate("bosse"));
-    }
 
     @Test
     void incorrectUsername() {
-        assertFalse(Username.validate("name with space"));
+
+    assertFalse(Username.validate("name with space"));
     }
 
     @ParameterizedTest
@@ -24,4 +21,13 @@ public class UsernameTest {
     void validUsernames(String validUsername) {
         assertTrue(Username.validate(validUsername));
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"bo", "MånsÖhman", "M2d-3", "H#nr7", "?mat?s", "23", "Anna Bok"})
+    @EmptySource
+    void invalidUsername(String invalidUsername) {
+        assertFalse(Username.validate(invalidUsername));
+    }
+
+
 }
