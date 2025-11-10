@@ -17,7 +17,14 @@ public class UtilsTest {
         assertEquals(Utils.onlyLettersAndWhitespace(input), actual);
     }
 
-
+    @ParameterizedTest
+    @CsvSource({"Ad4m Brown, adam brown",
+                "H4nn4 Smith, hanna smith",
+                "1337, leet",
+                "3ric'!, eric"})
+    void validateCleanAndUnLeet(String input, String actual) {
+        assertEquals(Utils.cleanAndUnLeet(input), actual);
+    }
 
 
 
