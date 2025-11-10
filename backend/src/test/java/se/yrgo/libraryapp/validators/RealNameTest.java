@@ -14,7 +14,7 @@ public class RealNameTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"frack banana", "Karl d4mn", "Hanna b4d4ss"})
+    @ValueSource(strings = {"frack Henry", "Karl d4mn", "Hanna b4d4ss", "B1im3y D@rek"})
     void invalidValidateTest(String name) {
         assertFalse(RealName.validate(name));
     }
