@@ -1,5 +1,7 @@
 package se.yrgo.libraryapp.dao;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.sql.SQLException;
 import java.util.Optional;
 import javax.sql.DataSource;
 import org.h2.jdbcx.JdbcDataSource;
@@ -34,5 +36,13 @@ public class UserDaoIntegrationTest {
         assertThat(maybeUser).isPresent();
         assertThat(maybeUser.get().getName()).isEqualTo(username);
         assertThat(maybeUser.get().getId()).isEqualTo(userId);
+    }
+
+    @Test
+    void userIdNotFound() {
+        final UserId userId = UserId.of(4);
+        UserDao userDao = new UserDao(ds);
+        Optional<User> userNotFound = userDao.get(Integer.toString(userId.getId()));
+        assertThat(userNotFound).isEmpty();
     }
 }
