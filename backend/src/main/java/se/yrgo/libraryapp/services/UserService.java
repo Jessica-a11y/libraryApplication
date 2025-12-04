@@ -33,12 +33,13 @@ public class UserService {
     }
 
     public boolean validateRegister(String name, String realname, String password) {
-
         String hashed = encoder.encode(password);
-
         String sanitizedRealname = realname.replace("'", "\\'");
-
         return userDao.register(name, sanitizedRealname, hashed);
+    }
+
+    public boolean checkIfNameIsAvailable(String name) {
+        return userDao.isNameAvailable(name);
     }
 
 
