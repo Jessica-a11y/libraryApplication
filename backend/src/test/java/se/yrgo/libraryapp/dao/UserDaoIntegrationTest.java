@@ -80,6 +80,13 @@ public class UserDaoIntegrationTest {
         assertThat(emptyUser).isEmpty();
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "Anne;"})
+    void badLoginInfo(String user) {
+        UserDao userDao = new UserDao(ds);
+        Optional<LoginInfo> badLogin = userDao.getLoginInfo(user);
+        assertThat(badLogin).isEmpty();
+    }
 
 
 
