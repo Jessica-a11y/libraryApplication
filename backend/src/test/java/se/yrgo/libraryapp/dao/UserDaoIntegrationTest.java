@@ -1,5 +1,6 @@
 package se.yrgo.libraryapp.dao;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -9,6 +10,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import com.radcortez.flyway.test.annotation.H2;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import se.yrgo.libraryapp.entities.User;
 import se.yrgo.libraryapp.entities.UserId;
 
@@ -45,4 +50,15 @@ public class UserDaoIntegrationTest {
         Optional<User> userNotFound = userDao.get(Integer.toString(userId.getId()));
         assertThat(userNotFound).isEmpty();
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"23'", "4", " "})
+    void getBadIds(String id){
+        UserDao userDao = new UserDao(ds);
+        Optional<User> userNotFound = userDao.get(id);
+        assertThat(userNotFound).isEmpty();
+    }
+
+
+
 }
