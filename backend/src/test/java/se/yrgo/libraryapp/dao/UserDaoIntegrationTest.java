@@ -62,7 +62,7 @@ public class UserDaoIntegrationTest {
     }
 
     @Test
-    void getLogInInfoTest() {
+    void getLoginInfoTest() {
         String username = "test";
         UserId userId = UserId.of(1);
         String hashedPassword = "$argon2i$v=19$m=16,t=2,p=1$MTIzNDU2Nzg5MDEyMzQ1NjA$LmFqTZeUWwqsnbZCS2E8XQ";
@@ -71,6 +71,13 @@ public class UserDaoIntegrationTest {
         assertThat(user).isPresent();
         assertThat(user.get().getUserId()).isEqualTo(userId);
         assertThat(user.get().getPasswordHash()).isEqualTo(hashedPassword);
+    }
+
+    @Test
+    void noLoginInfoFound() {
+        UserDao userDao = new UserDao(ds);
+        Optional<LoginInfo> emptyUser = userDao.getLoginInfo("Amanda");
+        assertThat(emptyUser).isEmpty();
     }
 
 
