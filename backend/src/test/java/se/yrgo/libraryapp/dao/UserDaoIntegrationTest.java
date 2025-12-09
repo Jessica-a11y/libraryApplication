@@ -14,6 +14,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import se.yrgo.libraryapp.entities.LoginInfo;
 import se.yrgo.libraryapp.entities.User;
 import se.yrgo.libraryapp.entities.UserId;
 
@@ -58,6 +60,19 @@ public class UserDaoIntegrationTest {
         Optional<User> userNotFound = userDao.get(id);
         assertThat(userNotFound).isEmpty();
     }
+
+    @Test
+    void getLogInInfoTest() {
+        String username = "test";
+        UserId userId = UserId.of(1);
+        String hashedPassword = "$argon2i$v=19$m=16,t=2,p=1$MTIzNDU2Nzg5MDEyMzQ1NjA$LmFqTZeUWwqsnbZCS2E8XQ";
+        UserDao userDao = new UserDao(ds);
+        Optional<LoginInfo> user  = userDao.getLoginInfo(username);
+        assertThat(user).isPresent();
+        assertThat(user.get().getUserId()).isEqualTo(userId);
+        assertThat(user.get().getPasswordHash()).isEqualTo(hashedPassword);
+    }
+
 
 
 
