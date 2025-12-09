@@ -3,6 +3,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
 import org.h2.jdbcx.JdbcDataSource;
@@ -87,6 +88,15 @@ public class UserDaoIntegrationTest {
         Optional<LoginInfo> badLogin = userDao.getLoginInfo(user);
         assertThat(badLogin).isEmpty();
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Hannah", "Kl4ra", "M4tts"})
+    void isNameAvailableTest(String name) {
+        UserDao userDao = new UserDao(ds);
+        assertThat(userDao.isNameAvailable(name)).isTrue();
+    }
+
+
 
 
 
