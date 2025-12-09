@@ -96,8 +96,10 @@ public class UserDaoIntegrationTest {
         assertThat(userDao.isNameAvailable(name)).isTrue();
     }
 
-
-
-
-
+    @Test
+    void nameIsNotAvailable() {
+        UserDao userDao = new UserDao(ds);
+        assertThat(userDao.isNameAvailable(null)).isFalse();
+        assertThat(userDao.isNameAvailable("test")).isFalse();
+    }
 }
