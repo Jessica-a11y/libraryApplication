@@ -43,8 +43,7 @@ public class UserDao {
     public Optional<LoginInfo> getLoginInfo(String user) {
         try (Connection conn = ds.getConnection();
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(
-                        "SELECT id, password_hash FROM user WHERE user = '" + user + "'")) {
+                ResultSet rs = stmt.executeQuery("SELECT id, password_hash FROM user WHERE user = '" + user + "'")) {
             if (rs.next()) {
                 int id = rs.getInt("id");
                 UserId userId = UserId.of(id);
@@ -58,12 +57,7 @@ public class UserDao {
         return Optional.empty();
     }
 
-    public boolean register(String name, String realname, String password) {
-        Argon2PasswordEncoder encoder = new Argon2PasswordEncoder();
-        String passwordHash = encoder.encode(password);
-
-        // handle names like Ian O'Toole
-        realname = realname.replace("'", "\\'");
+    public boolean register(String name, String realname, String passwordHash) {
 
         try (Connection conn = ds.getConnection()) {
             conn.setAutoCommit(false);
