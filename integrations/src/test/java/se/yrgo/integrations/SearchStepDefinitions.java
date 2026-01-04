@@ -28,4 +28,22 @@ public class SearchStepDefinitions {
         assertNotNull(startPage.findFindBookButton());
         assertEquals("form", searchPage.findForm().getTagName());
     }
+
+    @When("the user searches for {string}")
+    public void the_user_searches_for(String title) {
+        searchPage = startPage.navigateToSearchPage();
+        searchPage.searchForBookWithTitle(title);
+    }
+
+    @Then("{string} should be displayed")
+    public void should_be_displayed(String text) {
+        if (text.equals("Book not found")) {
+            assertEquals(text, searchPage.bookNotFound().getText());
+        } else if (text.equals("Matching books")) {
+            assertEquals(text, searchPage.bookFound().getText());
+        }
+    }
+
+
+
 }
