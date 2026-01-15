@@ -24,14 +24,17 @@ public class UserDao {
     }
 
     public Optional<User> get(String id) {
+        String selectQuery = "SELECT user, realname FROM user WHERE id = ?";
         try (Connection conn = ds.getConnection();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt
-                        .executeQuery("SELECT user, realname FROM user WHERE id = '" + id + "'")) {
-            if (rs.next()) {
-                String name = rs.getString("user");
-                String realname = rs.getString("realname");
-                return Optional.of(new User(UserId.of(id), name, realname));
+                PreparedStatement ps = conn.prepareStatement(selectQuery)) {
+            ps.setString(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String name = rs.getString("user");
+                    String realname = rs.getString("realname");
+                    return Optional.of(new User(UserId.of(id), name, realname));
+                }
             }
         } catch (SQLException ex) {
             logger.error("Unable to fetch user " + id, ex);
