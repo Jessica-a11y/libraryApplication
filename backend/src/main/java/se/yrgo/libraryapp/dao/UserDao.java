@@ -89,12 +89,15 @@ public class UserDao {
 
     private boolean insertUserAndRole(String name, String realname, String passwordHash,
             Connection conn) throws SQLException {
-        String insertUser = "INSERT INTO user (user, realname, password_hash) VALUES ('" + name
-                + "', '" + realname + "', '" + passwordHash + "')";
+        String insertUser = "INSERT INTO user (user, realname, password_hash) VALUES (?, ?, ?)";
 
-        try (Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(insertUser, Statement.RETURN_GENERATED_KEYS);
-            UserId userId = getGeneratedUserId(stmt);
+        try (PreparedStatement pstmt = conn.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, name);
+            pstmt.setString(2, realname);
+            pstmt.setString(3, passwordHash);
+            pstmt.executeUpdate();
+
+            UserId userId = getGeneratedUserId(pstmt);
 
             if (userId.getId() > 0 && addToUserRole(conn, userId)) {
                 conn.commit();
@@ -113,7 +116,7 @@ public class UserDao {
         }
     }
 
-    private UserId getGeneratedUserId(Statement stmt) throws SQLException {
+    private UserId getGeneratedUserId(PreparedStatement stmt) throws SQLException {
         try (ResultSet rs = stmt.getGeneratedKeys()) {
             rs.next();
             return UserId.of(rs.getInt(1));
@@ -121,10 +124,11 @@ public class UserDao {
     }
 
     private boolean addToUserRole(Connection conn, UserId user) throws SQLException {
-        String insertRole = "INSERT INTO user_role (user_id, role_id) VALUES (" + user + ", 2)";
+        String insertRole = "INSERT INTO user_role (user_id, role_id) VALUES (?, 2)";
 
-        try (Statement stmt = conn.createStatement()) {
-            return stmt.executeUpdate(insertRole) == 1;
+        try (PreparedStatement stmt = conn.prepareStatement(insertRole)) {
+            stmt.setInt(1, user.getId());
+            return stmt.executeUpdate() == 1;
         }
     }
 }
