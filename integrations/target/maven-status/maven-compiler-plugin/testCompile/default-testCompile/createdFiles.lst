@@ -1,0 +1,7 @@
+se\yrgo\pages\SearchPage.class
+se\yrgo\util\CustomConditions.class
+se\yrgo\util\Utils.class
+se\yrgo\pages\StartPage.class
+se\yrgo\integrations\RunCucumberTest.class
+se\yrgo\integrations\SearchStepDefinitions.class
+se\yrgo\integrations\GeneralStepDefinitions.class
