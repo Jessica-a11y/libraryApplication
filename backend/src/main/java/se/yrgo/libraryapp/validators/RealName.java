@@ -47,6 +47,9 @@ public final class RealName {
             if (invalidWords.contains(words[i])) {
                 return false;
             }
+            if (!name.matches("^[a-zA-Z0-9_-]{3,100}$")) {
+                throw new IllegalArgumentException("Not valid username");
+            }
         }
         return true;
     }
